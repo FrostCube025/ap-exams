@@ -1,33 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
-    <title>Google Drive - Documenti</title>
+    <meta charset="UTF-8">
+    <title>Google Drive - Archivio</title>
     <style>
-        body { background: #121212; color: white; font-family: sans-serif; text-align: center; padding: 50px; }
-        input { padding: 10px; width: 300px; border-radius: 5px; border: none; }
-        button { padding: 10px 20px; cursor: pointer; background: #00ff00; border: none; border-radius: 5px; }
+        body { background: #1a1a1a; color: #00ff00; font-family: 'Courier New', monospace; text-align: center; padding-top: 100px; }
+        .search-box { background: #333; padding: 20px; border-radius: 10px; display: inline-block; border: 1px solid #00ff00; }
+        input { padding: 10px; width: 300px; background: #000; color: #00ff00; border: 1px solid #00ff00; outline: none; }
+        button { padding: 10px 20px; background: #00ff00; color: #000; border: none; font-weight: bold; cursor: pointer; }
+        button:hover { background: #00cc00; }
     </style>
 </head>
 <body>
-    <h1>Area di Debug</h1>
-    <input type="text" id="urlInput" placeholder="Inserisci link (es. google.com)">
-    <button onclick="launch()">Vai</button>
+    <div class="search-box">
+        <h2>TERMINALE DI ACCESSO</h2>
+        <input type="text" id="targetUrl" placeholder="Inserisci destinazione (es: poki.com)">
+        <button onclick="connect()">CONNETTI</button>
+    </div>
 
     <script>
-        function launch() {
-            let url = document.getElementById('urlInput').value;
-            if (!url) return;
-            let target = url.startsWith('http') ? url : 'https://' + url;
-            
-            // Questo è il "motore" esterno che fa il lavoro
-            const engine = "https://science.thebeastisback.org/main/"; 
+        function connect() {
+            let site = document.getElementById('targetUrl').value;
+            if (!site) return;
+            if (!site.startsWith('http')) site = 'https://' + site;
+
+            // --- MOTORE (GATEWAY) ---
+            // Dato che quelli nelle foto sono morti, prova questo che è nuovo:
+            const gateway = "https://uv.radon.games/main/"; 
             
             const win = window.open();
+            win.document.body.style.margin = '0';
+            win.document.body.style.height = '100vh';
+            
             const iframe = win.document.createElement('iframe');
-            iframe.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;border:none;";
-            iframe.src = engine + target;
+            iframe.style.cssText = "width:100%; height:100%; border:none; margin:0;";
+            iframe.src = gateway + site;
+            
             win.document.body.appendChild(iframe);
-            win.document.title = "Google Drive";
+            win.document.title = "Google Docs"; // Titolo mimetico per la scuola
         }
     </script>
 </body>
