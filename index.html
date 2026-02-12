@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Salad Gateway</title>
+    <title>Web Access</title>
     <style>
-        /* STILE ISPIRATO A SALAD CHATT */
+        /* STILE DARK MODERNO */
         body {
             background-color: #121212;
             color: #e0e0e0;
@@ -27,21 +27,11 @@
             text-align: center;
         }
 
-        .icon {
-            font-size: 48px;
-            margin-bottom: 10px;
-        }
-
         h1 {
             font-size: 24px;
-            margin: 0 0 8px 0;
+            margin: 0 0 20px 0;
             font-weight: 600;
-        }
-
-        p {
-            color: #a0a0a0;
-            font-size: 14px;
-            margin-bottom: 24px;
+            color: #ffffff;
         }
 
         .input-group {
@@ -54,18 +44,23 @@
             background-color: #2c2c2c;
             border: 1px solid #3d3d3d;
             border-radius: 8px;
-            padding: 12px;
+            padding: 14px;
             color: white;
             font-size: 16px;
             outline: none;
+            transition: border 0.2s;
+        }
+
+        input:focus {
+            border-color: #4a4a4a;
         }
 
         button {
-            background-color: #2e7d32; /* Verde simile a Salad */
+            background-color: #3d3d3d;
             color: white;
             border: none;
             border-radius: 8px;
-            padding: 12px;
+            padding: 14px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
@@ -73,18 +68,11 @@
         }
 
         button:hover {
-            background-color: #388e3c;
-        }
-
-        .footer-tip {
-            margin-top: 20px;
-            font-size: 12px;
-            color: #666;
-            line-height: 1.4;
+            background-color: #4a4a4a;
         }
 
         .fav-list {
-            margin-top: 15px;
+            margin-top: 25px;
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
@@ -93,35 +81,35 @@
 
         .fav-item {
             background: #2c2c2c;
-            padding: 6px 12px;
+            padding: 8px 14px;
             border-radius: 20px;
-            font-size: 12px;
+            font-size: 13px;
             color: #bbb;
             text-decoration: none;
             cursor: pointer;
+            border: 1px solid #3d3d3d;
+        }
+
+        .fav-item:hover {
+            background: #3d3d3d;
+            color: white;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="icon">🥗</div>
-    <h1>Salad Gateway</h1>
-    <p>Inserisci un URL per navigare (Hobby Project)</p>
+    <h1>Web Access</h1>
 
     <div class="input-group">
-        <input type="text" id="targetUrl" placeholder="Esempio: poki.it">
-        <button onclick="launch()">Apri Sito</button>
+        <input type="text" id="targetUrl" placeholder="Inserisci URL...">
+        <button onclick="launch()">Apri</button>
     </div>
 
     <div class="fav-list">
         <div class="fav-item" onclick="quick('poki.it')">Poki</div>
-        <div class="fav-item" onclick="quick('kbhgames.com')">KBH</div>
+        <div class="fav-item" onclick="quick('kbhgames.com')">KBH Games</div>
         <div class="fav-item" onclick="quick('crazygames.com')">CrazyGames</div>
-    </div>
-
-    <div class="footer-tip">
-        Tip: Se il sito dà pagina bianca, significa che è protetto. Prova siti di giochi più semplici.
     </div>
 </div>
 
@@ -133,7 +121,7 @@
 
     function quick(site) {
         site = site.replace(/^https?:\/\//, '');
-        // Usiamo il tunnel di Vercel configurato nel vercel.json
+        // Reindirizzamento tramite il tunnel Vercel (vercel.json)
         window.location.href = "/proxy/" + site;
     }
 </script>
