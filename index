@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Google Drive - Documenti</title>
+    <style>
+        body { background: #121212; color: white; font-family: sans-serif; text-align: center; padding: 50px; }
+        input { padding: 10px; width: 300px; border-radius: 5px; border: none; }
+        button { padding: 10px 20px; cursor: pointer; background: #00ff00; border: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Area di Debug</h1>
+    <input type="text" id="urlInput" placeholder="Inserisci link (es. google.com)">
+    <button onclick="launch()">Vai</button>
+
+    <script>
+        function launch() {
+            let url = document.getElementById('urlInput').value;
+            if (!url) return;
+            let target = url.startsWith('http') ? url : 'https://' + url;
+            
+            // Questo è il "motore" esterno che fa il lavoro
+            const engine = "https://science.thebeastisback.org/main/"; 
+            
+            const win = window.open();
+            const iframe = win.document.createElement('iframe');
+            iframe.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;border:none;";
+            iframe.src = engine + target;
+            win.document.body.appendChild(iframe);
+            win.document.title = "Google Drive";
+        }
+    </script>
+</body>
+</html>
