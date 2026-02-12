@@ -5,107 +5,125 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Web Access</title>
     <style>
-        /* STILE DARK MODERNO */
         body {
-            background-color: #121212;
-            color: #e0e0e0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            overflow: hidden;
         }
 
         .container {
-            background-color: #1e1e1e;
-            padding: 24px;
-            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            padding: 30px;
+            border-radius: 24px;
             width: 90%;
-            max-width: 400px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            max-width: 450px;
             text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
         }
 
         h1 {
-            font-size: 24px;
-            margin: 0 0 20px 0;
-            font-weight: 600;
-            color: #ffffff;
+            font-size: 28px;
+            background: linear-gradient(to right, #00dbde, #fc00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 25px;
         }
 
         .input-group {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 15px;
         }
 
         input {
-            background-color: #2c2c2c;
-            border: 1px solid #3d3d3d;
-            border-radius: 8px;
-            padding: 14px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid #fc00ff;
+            border-radius: 12px;
+            padding: 15px;
             color: white;
             font-size: 16px;
             outline: none;
-            transition: border 0.2s;
+            transition: 0.3s;
         }
 
         input:focus {
-            border-color: #4a4a4a;
+            box-shadow: 0 0 15px #fc00ff;
         }
 
         button {
-            background-color: #3d3d3d;
+            background: linear-gradient(to right, #00dbde, #fc00ff);
             color: white;
             border: none;
-            border-radius: 8px;
-            padding: 14px;
-            font-size: 16px;
-            font-weight: 600;
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: bold;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: 0.3s;
         }
 
         button:hover {
-            background-color: #4a4a4a;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(252, 0, 255, 0.4);
         }
 
         .fav-list {
             margin-top: 25px;
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 10px;
             justify-content: center;
         }
 
         .fav-item {
-            background: #2c2c2c;
-            padding: 8px 14px;
-            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: 50px;
             font-size: 13px;
-            color: #bbb;
-            text-decoration: none;
             cursor: pointer;
-            border: 1px solid #3d3d3d;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: 0.3s;
         }
 
         .fav-item:hover {
-            background: #3d3d3d;
-            color: white;
+            background: white;
+            color: #302b63;
+        }
+
+        /* Overlay per caricamento */
+        #frame-container {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: black;
+            z-index: 9999;
+        }
+        
+        iframe {
+            width: 100%; height: 100%; border: none;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>Web Access</h1>
+<div id="frame-container">
+    <iframe id="proxy-frame"></iframe>
+</div>
 
+<div class="container" id="main-ui">
+    <h1>Web Access Pro</h1>
     <div class="input-group">
-        <input type="text" id="targetUrl" placeholder="Inserisci URL...">
-        <button onclick="launch()">Apri</button>
+        <input type="text" id="targetUrl" placeholder="Inserisci link (es. poki.it)...">
+        <button onclick="launch()">AVVIA TUNNEL</button>
     </div>
-
     <div class="fav-list">
         <div class="fav-item" onclick="quick('poki.it')">Poki</div>
         <div class="fav-item" onclick="quick('kbhgames.com')">KBH Games</div>
@@ -121,8 +139,18 @@
 
     function quick(site) {
         site = site.replace(/^https?:\/\//, '');
-        // Reindirizzamento tramite il tunnel Vercel (vercel.json)
-        window.location.href = "/proxy/" + site;
+        const proxyPath = "/proxy/" + site;
+        
+        // TRUCCO PER NON MOSTRARE L'URL ORIGINALE:
+        // Invece di reindirizzare, carichiamo tutto in un iframe che copre la pagina.
+        // Così l'URL nella barra rimane quello del tuo sito Vercel.
+        const container = document.getElementById('frame-container');
+        const frame = document.getElementById('proxy-frame');
+        const mainUi = document.getElementById('main-ui');
+
+        mainUi.style.display = 'none';
+        container.style.display = 'block';
+        frame.src = proxyPath;
     }
 </script>
 
