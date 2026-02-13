@@ -3,127 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Access</title>
+    <title>Class Notes</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ff00ff">
     <style>
         body {
-            background: #000;
+            background: #0d0d0d;
             color: #fff;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Arial Black', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
             overflow: hidden;
-            background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
         }
 
-        .card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
+        .container {
+            background: rgba(20, 20, 20, 0.9);
             padding: 40px;
-            border-radius: 30px;
-            border: 2px solid #00f2ff;
-            box-shadow: 0 0 50px rgba(0, 242, 255, 0.2);
+            border-radius: 40px;
+            width: 90%;
+            max-width: 420px;
             text-align: center;
-            width: 350px;
+            border: 5px solid #ff00ff;
+            box-shadow: 0 0 40px #ff00ff;
         }
 
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            background: linear-gradient(to right, #00f2ff, #00ff88);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 900;
+            font-size: 35px;
+            margin-bottom: 25px;
+            color: #00f2ff;
+            text-shadow: 2px 2px #ff00ff;
         }
 
         input {
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 20px;
+            width: 85%;
+            background: #000;
+            border: 3px solid #00f2ff;
             border-radius: 15px;
-            border: none;
-            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
             color: #fff;
+            font-size: 18px;
             outline: none;
-            box-sizing: border-box;
-            border: 1px solid #00f2ff;
+            margin-bottom: 20px;
         }
 
         button {
-            width: 100%;
-            padding: 15px;
-            border-radius: 15px;
+            background: #ff00ff;
+            color: white;
             border: none;
-            background: #00f2ff;
-            color: #000;
+            border-radius: 15px;
+            padding: 18px 50px;
+            font-size: 20px;
             font-weight: bold;
-            font-size: 1.1rem;
             cursor: pointer;
             transition: 0.3s;
         }
 
         button:hover {
-            background: #00ff88;
-            box-shadow: 0 0 20px #00ff88;
-            transform: scale(1.02);
+            transform: scale(1.05);
+            background: #00f2ff;
+            color: #000;
         }
 
-        .favs {
+        .fav-list {
+            margin-top: 30px;
             display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
             justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
         }
 
-        .fav {
-            font-size: 0.8rem;
-            color: #00f2ff;
+        .fav-item {
+            background: #333;
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-size: 14px;
             cursor: pointer;
-            text-decoration: underline;
+            border: 2px solid #00f2ff;
+            color: #00f2ff;
         }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <h1>BYPASS</h1>
-    <input type="text" id="url" placeholder="Inserisci URL (poki.it)...">
-    <button onclick="stealthLaunch()">AVVIA STEALTH</button>
-    <div class="favs">
-        <span class="fav" onclick="set('poki.it')">Poki</span>
-        <span class="fav" onclick="set('kbhgames.com')">KBH</span>
-        <span class="fav" onclick="set('crazygames.com')">Crazy</span>
+<div class="container">
+    <h1>APP ACCESS</h1>
+    <input type="text" id="target" placeholder="Sito da caricare...">
+    <br>
+    <button onclick="launch()">LANCIA</button>
+
+    <div class="fav-list">
+        <div class="fav-item" onclick="quick('poki.it')">POKI</div>
+        <div class="fav-item" onclick="quick('kbhgames.com')">KBH</div>
+        <div class="fav-item" onclick="quick('crazygames.com')">CRAZY</div>
     </div>
 </div>
 
 <script>
-    function set(val) { document.getElementById('url').value = val; }
+    // Registra il Service Worker per la PWA
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js');
+    }
 
-    function stealthLaunch() {
-        let target = document.getElementById('url').value;
-        if (!target) return;
-        target = target.replace(/^https?:\/\//, '');
+    function quick(s) { document.getElementById('target').value = s; launch(); }
 
-        const proxyUrl = window.location.origin + "/proxy/" + target;
-
-        // TRUCCO PER NASCONDERE L'URL:
-        // Creiamo una pagina che "contiene" l'intero sito dentro un contenitore object
-        // che è più difficile da "rompere" per i siti rispetto a un iframe.
-        document.body.innerHTML = `
-            <div style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:999999;background:#000;">
-                <object data="${proxyUrl}" style="width:100%;height:100%;">
-                    <embed src="${proxyUrl}" style="width:100%;height:100%;"></embed>
-                </object>
-            </div>
-            <div style="position:fixed;bottom:10px;right:10px;z-index:1000000;">
-                <button onclick="location.reload()" style="padding:5px 10px;font-size:10px;width:auto;opacity:0.3;">Chiudi</button>
-            </div>
-        `;
-        
-        // Cambiamo il titolo della scheda per mimetizzarci
-        document.title = "Google Docs";
+    function launch() {
+        let url = document.getElementById('target').value;
+        if(!url) return;
+        url = url.replace(/^https?:\/\//, '');
+        window.location.href = "/proxy/" + url;
     }
 </script>
 
