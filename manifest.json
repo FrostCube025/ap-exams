@@ -1,13 +1,13 @@
 {
-  "name": "Class Notes Pro",
+  "name": "Class Notes",
   "short_name": "Notes",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0d0d0d",
-  "theme_color": "#ff00ff",
+  "background_color": "#000000",
+  "theme_color": "#fff200",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/471/471663.png",
+      "src": "https://cdn-icons-png.flaticon.com/512/3209/3209265.png",
       "sizes": "512x512",
       "type": "image/png"
     }
