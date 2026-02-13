@@ -110,12 +110,20 @@
     function quick(s) { document.getElementById('target').value = s; launch(); }
 
     function launch() {
-        let url = document.getElementById('target').value;
-        if(!url) return;
-        url = url.replace(/^https?:\/\//, '');
-        window.location.href = "/proxy/" + url;
-    }
+    let url = document.getElementById('target').value;
+    if(!url) return;
+    
+    // Pulizia
+    url = url.replace(/^https?:\/\//, '');
+    
+    // Usiamo window.location.origin per essere sicuri di non perdere il dominio
+    const proxyPath = window.location.origin + "/proxy/" + url;
+    
+    console.log("Lancio il tunnel su: " + proxyPath); // Per fare debug
+    window.location.href = proxyPath;
+}
 </script>
 
 </body>
 </html>
+
